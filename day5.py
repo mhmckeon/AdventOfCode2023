@@ -130,10 +130,9 @@ seedRanges = []
 for x in range(1,len(seeds),2):
     start = int(seeds[x-1])
     stop = int(seeds[x])
-    seedRanges.append([start,start+stop])
+    seedRanges.append([start,start+stop-1])
 
 print(f"Seed ranges: {seedRanges}")
-seedRanges = [[79,93]]
 
 
 def rangeCheckAllIn(range,map):
@@ -145,7 +144,7 @@ def rangeCheckAllIn(range,map):
             if lower > upper:
                 return ranges
 
-            if lower > (item[1] + item[2]) or upper < item[1]:
+            if lower > (item[1] + item[2]-1) or upper < item[1]:
                 counter += 1
                 if counter > len(map):
                     ranges.append([lower,upper])
@@ -153,19 +152,19 @@ def rangeCheckAllIn(range,map):
                 continue
             counter = 0
             # checks all in
-            if lower > item[1] and upper < (item[1]+item[2]): # if error, check if these should be <= >=
+            if lower >= item[1] and upper <= (item[1]+item[2]-1): # if error, check if these should be <= >=
                 lower = lower - item[1] + item[0]
                 upper = upper - item[1] + item[0]
                 ranges.append([lower,upper])
                 return ranges            
             # then checks for just lower
-            elif lower >= item[1] and lower <= item[1]+item[2]:
+            elif lower >= item[1] and lower <= item[1]+item[2]-1:
                 tempLower = lower - item[1] + item[0]
-                tempUpper = item[0] + item[2]          # check adding in -1 if error with input
+                tempUpper = item[0] + item[2]-1          # check adding in -1 if error with input
                 ranges.append([tempLower, tempUpper])
-                lower = item[1] + item[2]+1
+                lower = item[1] + item[2]
             # then checks just upper
-            elif upper >= item[1] and upper <= item[1] + item[2]:
+            elif upper >= item[1] and upper <= item[1] + item[2]-1:
                 tempUpper = upper - item[1] + item[0]
                 tempLower = item[0]
                 ranges.append([tempLower, tempUpper])
@@ -177,6 +176,8 @@ topLevelInput = seedRanges.copy()
 nextLevelInput = []
 level = 0
 while level < 7:
+    if level == 5:
+        pass
     print(f"level is {level}")
     print(f"Seed is {topLevelInput}")
     print(f"map is {newMaps[level]}")
@@ -196,13 +197,14 @@ while level < 7:
 minimum = None
 for item in topLevelInput:
     if minimum == None or item[0] < minimum:
+        print(item)
         minimum = item[0]
 
 print("min is", minimum)
 if minimum <  24261546:
     print(True)
 #  too high - 24261546
-# print(rangeCheckAllIn([46, 57],[[60, 56, 37], [56, 93, 4]]))
+# print(rangeCheckAllIn([46, 56],[[60, 56, 37], [56, 93, 4]]))
 print("Finished")
 # [57,70]
 
