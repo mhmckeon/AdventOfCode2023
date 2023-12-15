@@ -32,7 +32,7 @@ class Location:
         return newX + newY
     
 # Day 11
-# Part 1
+# Part 1 - done by expanding the graph
 with open("input/day11.txt") as f:
     lines = f.read().split("\n")
 
@@ -74,9 +74,9 @@ for x in range(len(locations)):
     for y in range(x+1, len(locations)):
         total += locations[x].manhattan_dist(locations[y])
 
-print(total)
+print("Total 1:",total)
 
-# Part 2
+# Part 2 - done by changing the algorithm in manhattan distance (2)
 with open("input/day11.txt") as f:
     lines = f.read().split("\n")
 
@@ -107,6 +107,3 @@ for x in range(len(locations)):
     for y in range(x+1, len(locations)):
         total += locations[x].manhattan_dist2(locations[y], xExpand, yExpand)
 print("total 2:", total)
-
-print(locations[4].manhattan_dist(locations[8]))
-print(locations[4].manhattan_dist2(locations[8], xExpand, yExpand))
