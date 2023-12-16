@@ -49,40 +49,40 @@ class Beam:
         # splitters
         if tileType == "|":
             if self.position[1]+ 1 <= GRIDLENGTH:
-                beam1 = Beam([self.position[0],self.position[1]+1], "north")
+                beam1 = Beam([self.position[0],self.position[1]], "north")
             if self.position[1] - 1 >= 0:
-                beam2 = Beam([self.position[0],self.position[1]-1], "south")
+                beam2 = Beam([self.position[0],self.position[1]], "south")
         elif tileType == "-":
             if self.position[0]+ 1 <= GRIDWIDTH:
-                beam1 = Beam([self.position[0]+1,self.position[1]], "east")
+                beam1 = Beam([self.position[0],self.position[1]], "east")
             if self.position[0] - 1 >= 0:
-                beam2 = Beam([self.position[0]-1,self.position[1]], "west")
+                beam2 = Beam([self.position[0],self.position[1]], "west")
         # mirrors \\
         elif tileType == "\\" and self.direction == "east":
             if self.position[1] - 1 >= 0:
-                beam2 = Beam([self.position[0],self.position[1]-1], "south")
+                beam2 = Beam([self.position[0],self.position[1]], "south")
         elif tileType == "\\" and self.direction == "west":
             if self.position[1]+ 1 <= GRIDLENGTH:
-                beam1 = Beam([self.position[0],self.position[1]+1], "north")
+                beam1 = Beam([self.position[0],self.position[1]], "north")
         elif tileType == "\\" and self.direction == "north":
             if self.position[0] - 1 >= 0:
-                beam2 = Beam([self.position[0]-1,self.position[1]], "west")
+                beam2 = Beam([self.position[0],self.position[1]], "west")
         elif tileType == "\\" and self.direction == "south":
             if self.position[0]+ 1 <= GRIDWIDTH:
-                beam1 = Beam([self.position[0]+1,self.position[1]], "east")
+                beam1 = Beam([self.position[0],self.position[1]], "east")
         # mirrors / 
         elif tileType == "/" and self.direction == "east":
             if self.position[1]+ 1 <= GRIDLENGTH:
-                beam1 = Beam([self.position[0],self.position[1]+1], "north")
+                beam1 = Beam([self.position[0],self.position[1]], "north")
         elif tileType == "/" and self.direction == "west":
             if self.position[1] - 1 >= 0:
-                beam2 = Beam([self.position[0],self.position[1]-1], "south")   
+                beam2 = Beam([self.position[0],self.position[1]], "south")   
         elif tileType == "/" and self.direction == "south":
             if self.position[0] - 1 >= 0:
-                beam2 = Beam([self.position[0]-1,self.position[1]], "west")
+                beam2 = Beam([self.position[0],self.position[1]], "west")
         elif tileType == "/" and self.direction == "north":
             if self.position[0]+ 1 <= GRIDWIDTH:
-                beam1 = Beam([self.position[0]+1,self.position[1]], "east")          
+                beam1 = Beam([self.position[0],self.position[1]], "east")          
 
         if all(item is not None for item in [beam1, beam2]):
             return [beam1, beam2]
@@ -99,6 +99,7 @@ class Beam:
 
     def move(self):
         currentTile = GRID[self.position[1]][self.position[0]]
+        currentTile[self.direction] = True
         if self.direction == "north":
             while True:
                 self.position = (self.position[0],self.position[1]+1)
@@ -193,11 +194,15 @@ for beam in currentBeams:
     if movement != True:
         tempBeams.append(*movement)
 
-    currentBeams = tempBeams.copy()
+for tempBeam in tempBeams:
+    tempTile = GRID[tempBeam.position[1]][tempBeam.position[0]]
+    if tempTile.directionsDone[tempBeam.direction] == True:
+
+
+currentBeams = tempBeams.copy()
 
 print(currentBeams)
 
 print(Tile.totalTouched)
 
 
-# need to add both backslash beams 
