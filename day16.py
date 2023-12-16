@@ -99,7 +99,7 @@ class Beam:
 
     def move(self):
         currentTile = GRID[self.position[1]][self.position[0]]
-        currentTile[self.direction] = True
+        currentTile.directionsDone[self.direction] = True
         if self.direction == "north":
             while True:
                 self.position = (self.position[0],self.position[1]+1)
@@ -107,15 +107,15 @@ class Beam:
                     self.finished = True
                     return True
                 currentTile = GRID[self.position[1]][self.position[0]]
-                currentTile.lightUp(self.position[1], self.position[0])
+                currentTile.lightUp()
                 if currentTile.tileType == "-":
                     self.finished = True
-                    currentTile.directionsDone[self.direction] = True
-                    currentTile.directionsDone["south"] = True
+                    # currentTile.directionsDone[self.direction] = True
+                    # currentTile.directionsDone["south"] = True
                     return self.newBeams(currentTile.tileType)
                 elif currentTile.tileType == ["/", "\\"]:
                     self.finished = True
-                    currentTile.directionsDone[self.direction] = True
+                    # currentTile.directionsDone[self.direction] = True
                     return self.newBeams(currentTile.tileType)
 
         elif self.direction == "south":
@@ -125,15 +125,15 @@ class Beam:
                     self.finished = True
                     return True
                 currentTile = GRID[self.position[1]][self.position[0]]
-                currentTile.lightUp(self.position[1], self.position[0])
+                currentTile.lightUp()
                 if currentTile.tileType == "-":
                     self.finished = True
-                    currentTile.directionsDone[self.direction] = True
-                    currentTile.directionsDone["north"] = True
+                    # currentTile.directionsDone[self.direction] = True
+                    # currentTile.directionsDone["north"] = True
                     return self.newBeams(currentTile.tileType)
                 elif currentTile.tileType in ["\\", "/"]:
                     self.finished = True
-                    currentTile.directionsDone[self.direction] = True
+                    # currentTile.directionsDone[self.direction] = True
                     return self.newBeams(currentTile.tileType)
     
 
@@ -147,12 +147,12 @@ class Beam:
                 currentTile.lightUp()
                 if currentTile.tileType == "|":
                     self.finished = True
-                    currentTile.directionsDone[self.direction] = True
-                    currentTile.directionsDone["west"] = True
+                    # currentTile.directionsDone[self.direction] = True
+                    # currentTile.directionsDone["west"] = True
                     return self.newBeams(currentTile.tileType)
                 elif currentTile.tileType in ["\\", "/"]:
                     self.finished = True
-                    currentTile.directionsDone[self.direction] = True
+                    # currentTile.directionsDone[self.direction] = True
                     return self.newBeams(currentTile.tileType)
 
         elif self.direction == "west":
@@ -165,12 +165,12 @@ class Beam:
                 currentTile.lightUp()
                 if currentTile.tileType == "|":
                     self.finished = True
-                    currentTile.directionsDone[self.direction] = True
-                    currentTile.directionsDone["east"] = True
+                    # currentTile.directionsDone[self.direction] = True
+                    # currentTile.directionsDone["east"] = True
                     return self.newBeams(currentTile.tileType)
                 elif currentTile.tileType in ["\\", "/"]:
                     self.finished = True
-                    currentTile.directionsDone[self.direction] = True
+                    # currentTile.directionsDone[self.direction] = True
                     return self.newBeams(currentTile.tileType)
 
 
@@ -181,25 +181,24 @@ for indY, down in enumerate(GRID):
         tempRight.append(Tile(right))
     GRID[indY] = tempRight
 
-print(GRID[0][1])
-
 
 ogBeamer = Beam([0,0],"east")
 currentBeams = [ogBeamer]
 
-# while currentBeams: 
-tempBeams = []
-for beam in currentBeams:
-    movement = beam.move()
-    if movement != True:
-        tempBeams.append(*movement)
+while currentBeams:
+    tempBeams = []
+    for beam in currentBeams:
+        movement = beam.move()
+        if movement != True:
+            for move in movement:
+                tempBeams.append(move)
 
-for tempBeam in tempBeams:
-    tempTile = GRID[tempBeam.position[1]][tempBeam.position[0]]
-    if tempTile.directionsDone[tempBeam.direction] == True:
+    for tempBeam in tempBeams:
+        tempTile = GRID[tempBeam.position[1]][tempBeam.position[0]]
+        if tempTile.directionsDone[tempBeam.direction] == True:
+            tempBeams.remove(tempBeam)
 
-
-currentBeams = tempBeams.copy()
+    currentBeams = tempBeams.copy()
 
 print(currentBeams)
 
