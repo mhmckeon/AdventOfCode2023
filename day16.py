@@ -25,6 +25,9 @@ class Tile:
     def __repr__(self):
         return self.tileType
     
+    def __str__(self) -> str:
+        return self.tileType
+    
 
 
 class Beam:
@@ -91,6 +94,8 @@ class Beam:
             print("no more tiles this way")
             return True
 
+    def __repr__(self) -> str:
+        return str(self.position)
 
     def move(self):
         currentTile = GRID[self.position[1]][self.position[0]]
@@ -102,12 +107,16 @@ class Beam:
                     return True
                 currentTile = GRID[self.position[1]][self.position[0]]
                 currentTile.lightUp(self.position[1], self.position[0])
-                if currentTile.tileType in ["-", "/","\\"]:
+                if currentTile.tileType == "-":
                     self.finished = True
                     currentTile.directionsDone[self.direction] = True
                     currentTile.directionsDone["south"] = True
-                    return self.position
-            
+                    return self.newBeams(currentTile.tileType)
+                elif currentTile.tileType == ["/", "\\"]:
+                    self.finished = True
+                    currentTile.directionsDone[self.direction] = True
+                    return self.newBeams(currentTile.tileType)
+
         elif self.direction == "south":
             while True:
                 self.position = (self.position[0],self.position[1]-1)
@@ -120,7 +129,12 @@ class Beam:
                     self.finished = True
                     currentTile.directionsDone[self.direction] = True
                     currentTile.directionsDone["north"] = True
-                    return self.position
+                    return self.newBeams(currentTile.tileType)
+                elif currentTile.tileType in ["\\", "/"]:
+                    self.finished = True
+                    currentTile.directionsDone[self.direction] = True
+                    return self.newBeams(currentTile.tileType)
+    
 
         elif self.direction == "east":
             while True:
@@ -135,6 +149,10 @@ class Beam:
                     currentTile.directionsDone[self.direction] = True
                     currentTile.directionsDone["west"] = True
                     return self.newBeams(currentTile.tileType)
+                elif currentTile.tileType in ["\\", "/"]:
+                    self.finished = True
+                    currentTile.directionsDone[self.direction] = True
+                    return self.newBeams(currentTile.tileType)
 
         elif self.direction == "west":
             while True:
@@ -148,7 +166,11 @@ class Beam:
                     self.finished = True
                     currentTile.directionsDone[self.direction] = True
                     currentTile.directionsDone["east"] = True
-                    return self.newBeams()
+                    return self.newBeams(currentTile.tileType)
+                elif currentTile.tileType in ["\\", "/"]:
+                    self.finished = True
+                    currentTile.directionsDone[self.direction] = True
+                    return self.newBeams(currentTile.tileType)
 
 
 
