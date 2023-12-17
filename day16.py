@@ -230,17 +230,47 @@ def testBeam(currentBeams):
 potentialBeams = []
 # all Y axis
 for y in range(GRIDLENGTH):
-    potentialBeams.append([Beam([0,y],"east")])
-    potentialBeams.append([Beam([GRIDWIDTH-1,y],"west")])
+    if GRID[y][0].tileType == "\\":
+        potentialBeams.append([Beam([0,y],"south")])
+    elif GRID[y][0].tileType == "/":
+        potentialBeams.append([Beam([0,y],"north")])
+    elif GRID[y][0].tileType == "|":
+        potentialBeams.append([Beam([0,y],"north"),Beam([0,y],"south")])
+    else:
+        potentialBeams.append([Beam([0,y],"east")])
+
+    if GRID[y][0].tileType == "\\":
+        potentialBeams.append([Beam([GRIDWIDTH-1,y],"north")])
+    elif GRID[y][0].tileType == "/":
+        potentialBeams.append([Beam([GRIDWIDTH-1,y],"south")])
+    elif GRID[y][0].tileType == "|":
+        potentialBeams.append([Beam([GRIDWIDTH-1,y],"north"),Beam([0,y],"south")])
+    else:
+        potentialBeams.append([Beam([GRIDWIDTH-1,y],"west")])
 
 # all X axis
 for x in range(GRIDWIDTH):
-    potentialBeams.append([Beam([x,0],"south")])
-    potentialBeams.append([Beam([x, GRIDLENGTH-1],"north")])
+    if GRID[0][x].tileType == "\\":
+        potentialBeams.append([Beam([x,0],"east")])
+    elif GRID[0][x].tileType == "/":
+        potentialBeams.append([Beam([x,0],"west")])
+    elif GRID[0][x].tileType == "-":
+        potentialBeams.append([Beam([x,0],"east"),Beam([x,0],"west")])
+    else:
+        potentialBeams.append([Beam([x,0],"south")])
+    
+    if GRID[GRIDLENGTH-1][0].tileType == "\\":
+        potentialBeams.append([Beam([x, GRIDLENGTH-1],"west")])
+    elif GRID[GRIDLENGTH-1][0].tileType == "/":
+        potentialBeams.append([Beam([x, GRIDLENGTH-1],"east")])
+    elif GRID[GRIDLENGTH-1][0].tileType == "-":
+        potentialBeams.append([Beam([x, GRIDLENGTH-1],"west"),Beam([x, GRIDLENGTH-1],"east")])
+    else:
+        potentialBeams.append([Beam([x, GRIDLENGTH-1],"north")])
 
 # edge cases
-potentialBeams.append([Beam([0,0], "south")])
-potentialBeams.append([Beam([0,GRIDWIDTH-1], "south")])
+# potentialBeams.append([Beam([0,0], "south")])
+# potentialBeams.append([Beam([0,GRIDWIDTH-1], "south")])
 
 
 with open(input) as f:
@@ -252,14 +282,12 @@ for indY, down in enumerate(GRID):
         tempRight.append(Tile(right))
     GRID[indY] = tempRight
 
-print(potentialBeams)
 
 topBeam = None
 
 for tempBeam in potentialBeams:
     Tile.totalTouched = 0
     num = testBeam(tempBeam)
-    print(num)
     
     if topBeam == None or num > topBeam:
         topBeam = num
@@ -273,10 +301,7 @@ for tempBeam in potentialBeams:
             tempRight.append(Tile(right))
         GRID[indY] = tempRight
 
-print(topBeam)
-print(num)
+print("Part 2:",topBeam)
 
-
-print(GRIDLENGTH)
             
 # too low 7830
