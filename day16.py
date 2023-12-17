@@ -162,13 +162,11 @@ class Beam:
                     return self.newBeams(currentTile.tileType)
 
 
-
 for indY, down in enumerate(GRID):
     tempRight = []
     for right in down:
         tempRight.append(Tile(right))
     GRID[indY] = tempRight
-
 
 
 ogBeamer = Beam([0,0],"south")
@@ -188,26 +186,7 @@ while currentBeams:
             tempBeams.remove(tempBeam)
     currentBeams = tempBeams.copy()
 
-
 print("Part 1:",Tile.totalTouched)
-
-
-
-# Used to print out the energised map
-# total = 0
-# for row in GRID:
-#     for til in row:
-#         if til.touched == True:
-#             total += 1
-#             if til.tileType in ["\\","/","-","|"]:
-#                 print(til.tileType, end="")
-#             else:
-#                 print("#" ,end="")
-#         else:
-#             print(".", end="")
-#     print()
-# print(total)
-
 
 
 # Part 2
@@ -226,8 +205,6 @@ def testBeam(currentBeams):
         currentBeams = tempBeams.copy()
     return Tile.totalTouched
 
-import time
-start = time.time()
 
 potentialBeams = []
 # all Y axis
@@ -259,7 +236,6 @@ for x in range(GRIDWIDTH):
         potentialBeams.append([Beam([x,0],"east"),Beam([x,0],"west")])
     else:
         potentialBeams.append([Beam([x,0],"south")])
-    
     if GRID[GRIDLENGTH-1][0].tileType == "\\":
         potentialBeams.append([Beam([x, GRIDLENGTH-1],"west")])
     elif GRID[GRIDLENGTH-1][0].tileType == "/":
@@ -281,19 +257,15 @@ for indY, down in enumerate(GRID):
 
 
 topBeam = None
-topBeamGRID = None
 
 for tempBeam in potentialBeams:
     Tile.totalTouched = 0
     num = testBeam(tempBeam)
-    
     if topBeam == None or num > topBeam:
         topBeam = num
-        topBeamGRID = tempBeam
 
     with open(input) as f:
         GRID = f.read().split("\n")
-
     for indY, down in enumerate(GRID):
         tempRight = []
         for right in down:
@@ -301,23 +273,4 @@ for tempBeam in potentialBeams:
         GRID[indY] = tempRight
 
 print("Part 2:",topBeam)
-print(topBeamGRID)
-            
-finish = time.time()
 
-print(finish-start)
-
-
-# total = 0
-# for row in GRID:
-#     for til in row:
-#         if til.touched == True:
-#             total += 1
-#             if til.tileType in ["\\","/","-","|"]:
-#                 print(til.tileType, end="")
-#             else:
-#                 print("#" ,end="")
-#         else:
-#             print(".", end="")
-#     print()
-# print(total)
