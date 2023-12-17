@@ -48,40 +48,40 @@ class Beam:
         beam1, beam2 = None, None
         # splitters
         if tileType == "|":
-            if self.position[1]+ 1 <= GRIDLENGTH:
-                beam1 = Beam([self.position[0],self.position[1]], "north")
+            if self.position[1]+ 1 < GRIDLENGTH:
+                beam1 = Beam([self.position[0],self.position[1]], "south")
             if self.position[1] - 1 >= 0:
-                beam2 = Beam([self.position[0],self.position[1]], "south")
+                beam2 = Beam([self.position[0],self.position[1]], "north")
         elif tileType == "-":
-            if self.position[0]+ 1 <= GRIDWIDTH:
+            if self.position[0]+ 1 < GRIDWIDTH:
                 beam1 = Beam([self.position[0],self.position[1]], "east")
             if self.position[0] - 1 >= 0:
                 beam2 = Beam([self.position[0],self.position[1]], "west")
         # mirrors \\
         elif tileType == "\\" and self.direction == "east":
-            if self.position[1] - 1 >= 0:
+            if self.position[1] + 1 < GRIDLENGTH:
                 beam2 = Beam([self.position[0],self.position[1]], "south")
         elif tileType == "\\" and self.direction == "west":
-            if self.position[1]+ 1 <= GRIDLENGTH:
+            if self.position[1]- 1 >= 0:
                 beam1 = Beam([self.position[0],self.position[1]], "north")
         elif tileType == "\\" and self.direction == "north":
             if self.position[0] - 1 >= 0:
                 beam2 = Beam([self.position[0],self.position[1]], "west")
         elif tileType == "\\" and self.direction == "south":
-            if self.position[0]+ 1 <= GRIDWIDTH:
+            if self.position[0]+ 1 < GRIDWIDTH:
                 beam1 = Beam([self.position[0],self.position[1]], "east")
         # mirrors / 
         elif tileType == "/" and self.direction == "east":
-            if self.position[1]+ 1 <= GRIDLENGTH:
+            if self.position[1]- 1 >= 0:
                 beam1 = Beam([self.position[0],self.position[1]], "north")
         elif tileType == "/" and self.direction == "west":
-            if self.position[1] - 1 >= 0:
+            if self.position[1] + 1 < GRIDLENGTH:
                 beam2 = Beam([self.position[0],self.position[1]], "south")   
         elif tileType == "/" and self.direction == "south":
             if self.position[0] - 1 >= 0:
                 beam2 = Beam([self.position[0],self.position[1]], "west")
         elif tileType == "/" and self.direction == "north":
-            if self.position[0]+ 1 <= GRIDWIDTH:
+            if self.position[0]+ 1 < GRIDWIDTH:
                 beam1 = Beam([self.position[0],self.position[1]], "east")          
 
         if all(item is not None for item in [beam1, beam2]):
@@ -91,7 +91,7 @@ class Beam:
         elif beam2 != None:
             return [beam2]
         else:
-            print("no more tiles this way")
+            # print("no more tiles this way")
             return True
 
     def __repr__(self) -> str:
@@ -102,38 +102,32 @@ class Beam:
         currentTile.directionsDone[self.direction] = True
         if self.direction == "north":
             while True:
-                self.position = (self.position[0],self.position[1]+1)
-                if self.position[1] >= GRIDLENGTH: # change to just greater than if issues
+                self.position = (self.position[0],self.position[1]-1)
+                if self.position[1] < 0: 
                     self.finished = True
                     return True
                 currentTile = GRID[self.position[1]][self.position[0]]
                 currentTile.lightUp()
                 if currentTile.tileType == "-":
                     self.finished = True
-                    # currentTile.directionsDone[self.direction] = True
-                    # currentTile.directionsDone["south"] = True
                     return self.newBeams(currentTile.tileType)
-                elif currentTile.tileType == ["/", "\\"]:
+                elif currentTile.tileType in ["/", "\\"]:
                     self.finished = True
-                    # currentTile.directionsDone[self.direction] = True
                     return self.newBeams(currentTile.tileType)
 
         elif self.direction == "south":
             while True:
-                self.position = (self.position[0],self.position[1]-1)
-                if self.position[1] < 0:
+                self.position = (self.position[0],self.position[1]+1)
+                if self.position[1] >= GRIDLENGTH:
                     self.finished = True
                     return True
                 currentTile = GRID[self.position[1]][self.position[0]]
                 currentTile.lightUp()
                 if currentTile.tileType == "-":
                     self.finished = True
-                    # currentTile.directionsDone[self.direction] = True
-                    # currentTile.directionsDone["north"] = True
                     return self.newBeams(currentTile.tileType)
                 elif currentTile.tileType in ["\\", "/"]:
                     self.finished = True
-                    # currentTile.directionsDone[self.direction] = True
                     return self.newBeams(currentTile.tileType)
     
 
@@ -147,12 +141,9 @@ class Beam:
                 currentTile.lightUp()
                 if currentTile.tileType == "|":
                     self.finished = True
-                    # currentTile.directionsDone[self.direction] = True
-                    # currentTile.directionsDone["west"] = True
                     return self.newBeams(currentTile.tileType)
                 elif currentTile.tileType in ["\\", "/"]:
                     self.finished = True
-                    # currentTile.directionsDone[self.direction] = True
                     return self.newBeams(currentTile.tileType)
 
         elif self.direction == "west":
@@ -165,12 +156,9 @@ class Beam:
                 currentTile.lightUp()
                 if currentTile.tileType == "|":
                     self.finished = True
-                    # currentTile.directionsDone[self.direction] = True
-                    # currentTile.directionsDone["east"] = True
                     return self.newBeams(currentTile.tileType)
                 elif currentTile.tileType in ["\\", "/"]:
                     self.finished = True
-                    # currentTile.directionsDone[self.direction] = True
                     return self.newBeams(currentTile.tileType)
 
 
@@ -182,7 +170,8 @@ for indY, down in enumerate(GRID):
     GRID[indY] = tempRight
 
 
-ogBeamer = Beam([0,0],"east")
+
+ogBeamer = Beam([0,0],"south")
 currentBeams = [ogBeamer]
 
 while currentBeams:
@@ -197,11 +186,97 @@ while currentBeams:
         tempTile = GRID[tempBeam.position[1]][tempBeam.position[0]]
         if tempTile.directionsDone[tempBeam.direction] == True:
             tempBeams.remove(tempBeam)
-
     currentBeams = tempBeams.copy()
 
-print(currentBeams)
 
-print(Tile.totalTouched)
+print("Part 1:",Tile.totalTouched)
 
 
+
+# Used to print out the energised map
+# total = 0
+# for row in GRID:
+#     for til in row:
+#         if til.touched == True:
+#             total += 1
+#             if til.tileType in ["\\","/","-","|"]:
+#                 print(til.tileType, end="")
+#             else:
+#                 print("#" ,end="")
+#         else:
+#             print(".", end="")
+#     print()
+# print(total)
+
+
+
+# Part 2
+def testBeam(currentBeams):
+    while currentBeams:
+        tempBeams = []
+        for beam in currentBeams:
+            movement = beam.move()
+            if movement != True:
+                for move in movement:
+                    tempBeams.append(move)
+        for tempBeam in tempBeams:
+            tempTile = GRID[tempBeam.position[1]][tempBeam.position[0]]
+            if tempTile.directionsDone[tempBeam.direction] == True:
+                tempBeams.remove(tempBeam)
+        currentBeams = tempBeams.copy()
+    return Tile.totalTouched
+
+
+potentialBeams = []
+# all Y axis
+for y in range(GRIDLENGTH):
+    potentialBeams.append([Beam([0,y],"east")])
+    potentialBeams.append([Beam([GRIDWIDTH-1,y],"west")])
+
+# all X axis
+for x in range(GRIDWIDTH):
+    potentialBeams.append([Beam([x,0],"south")])
+    potentialBeams.append([Beam([x, GRIDLENGTH-1],"north")])
+
+# edge cases
+potentialBeams.append([Beam([0,0], "south")])
+potentialBeams.append([Beam([0,GRIDWIDTH-1], "south")])
+
+
+with open(input) as f:
+    GRID = f.read().split("\n")
+
+for indY, down in enumerate(GRID):
+    tempRight = []
+    for right in down:
+        tempRight.append(Tile(right))
+    GRID[indY] = tempRight
+
+print(potentialBeams)
+
+topBeam = None
+
+for tempBeam in potentialBeams:
+    Tile.totalTouched = 0
+    num = testBeam(tempBeam)
+    print(num)
+    
+    if topBeam == None or num > topBeam:
+        topBeam = num
+
+    with open(input) as f:
+        GRID = f.read().split("\n")
+
+    for indY, down in enumerate(GRID):
+        tempRight = []
+        for right in down:
+            tempRight.append(Tile(right))
+        GRID[indY] = tempRight
+
+print(topBeam)
+print(num)
+
+
+print(GRIDLENGTH)
+            
+# too low 7830
