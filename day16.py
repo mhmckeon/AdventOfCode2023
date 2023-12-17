@@ -100,6 +100,7 @@ class Beam:
     def move(self):
         currentTile = GRID[self.position[1]][self.position[0]]
         currentTile.directionsDone[self.direction] = True
+        currentTile.lightUp()
         if self.direction == "north":
             while True:
                 self.position = (self.position[0],self.position[1]-1)
@@ -129,7 +130,6 @@ class Beam:
                 elif currentTile.tileType in ["\\", "/"]:
                     self.finished = True
                     return self.newBeams(currentTile.tileType)
-    
 
         elif self.direction == "east":
             while True:
@@ -226,6 +226,8 @@ def testBeam(currentBeams):
         currentBeams = tempBeams.copy()
     return Tile.totalTouched
 
+import time
+start = time.time()
 
 potentialBeams = []
 # all Y axis
@@ -247,7 +249,6 @@ for y in range(GRIDLENGTH):
         potentialBeams.append([Beam([GRIDWIDTH-1,y],"north"),Beam([0,y],"south")])
     else:
         potentialBeams.append([Beam([GRIDWIDTH-1,y],"west")])
-
 # all X axis
 for x in range(GRIDWIDTH):
     if GRID[0][x].tileType == "\\":
@@ -268,10 +269,6 @@ for x in range(GRIDWIDTH):
     else:
         potentialBeams.append([Beam([x, GRIDLENGTH-1],"north")])
 
-# edge cases
-# potentialBeams.append([Beam([0,0], "south")])
-# potentialBeams.append([Beam([0,GRIDWIDTH-1], "south")])
-
 
 with open(input) as f:
     GRID = f.read().split("\n")
@@ -284,6 +281,7 @@ for indY, down in enumerate(GRID):
 
 
 topBeam = None
+topBeamGRID = None
 
 for tempBeam in potentialBeams:
     Tile.totalTouched = 0
@@ -291,6 +289,7 @@ for tempBeam in potentialBeams:
     
     if topBeam == None or num > topBeam:
         topBeam = num
+        topBeamGRID = tempBeam
 
     with open(input) as f:
         GRID = f.read().split("\n")
@@ -302,6 +301,23 @@ for tempBeam in potentialBeams:
         GRID[indY] = tempRight
 
 print("Part 2:",topBeam)
-
+print(topBeamGRID)
             
-# too low 7830
+finish = time.time()
+
+print(finish-start)
+
+
+# total = 0
+# for row in GRID:
+#     for til in row:
+#         if til.touched == True:
+#             total += 1
+#             if til.tileType in ["\\","/","-","|"]:
+#                 print(til.tileType, end="")
+#             else:
+#                 print("#" ,end="")
+#         else:
+#             print(".", end="")
+#     print()
+# print(total)
