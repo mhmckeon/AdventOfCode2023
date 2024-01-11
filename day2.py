@@ -10,6 +10,7 @@ testinput = []
 input = []
 currentList = input
 
+# Splits the input into two lists
 option2 = False
 for line in lines:
     if option2 != False:

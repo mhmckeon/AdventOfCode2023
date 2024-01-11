@@ -75,6 +75,3 @@ grid = pattern[(1000000000 - first) % (turn - first) + first-1]
 
 print(countWeight(grid))
 
-
-
-

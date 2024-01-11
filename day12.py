@@ -20,11 +20,6 @@ print(spaces)
 print(nums)
 
 
-
-
-
-
-
 checkAllCount = 0
 while True:
     if checkAllCount >= len(spaces):
@@ -88,7 +83,3 @@ for indOut, space in enumerate(spaces):
 
 print(total)
     
-
-
-# 3942 too low
-# 

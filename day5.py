@@ -33,14 +33,14 @@ def checkRange(find, listofNums):
 lowestEnd = None
 
 
-# for seed in seeds:
-#     seed = int(seed)
-#     for map in maps:
-#         check = checkRange(seed, map)
-#         if check != None:
-#             seed = check
-#     if lowestEnd == None or seed < lowestEnd:
-#         lowestEnd = seed
+for seed in seeds:
+    seed = int(seed)
+    for map in maps:
+        check = checkRange(seed, map)
+        if check != None:
+            seed = check
+    if lowestEnd == None or seed < lowestEnd:
+        lowestEnd = seed
 
 print(lowestEnd)
    
@@ -58,62 +58,6 @@ def newcheckRange(find, listofNums):
     return findTheNum
 
 
-
-# method 2
-# seedList = []
-# maps.reverse()
-# numberFound = False
-# number = 46
-# while numberFound == False:
-#     seed = number
-#     for map in maps:
-#         check = newcheckRange(seed, map)
-#         if check != None:
-#             seed = check
-#     for x in range(1,len(seeds),2):
-#         start = int(seeds[x-1])
-#         stop = int(seeds[x]) + start
-#         if seed >= start and seed <= stop:
-#             seedList.append(number)
-    
-#     if number == 1000000:
-#         break
-#     number += 1
-
-# print(1)
-# print(seedList)
-# print(min(seedList))
-
-
-
-
-
-
-# # works for sample - not optimised enough for full
-# lowestEnd = None
-# for x in range(1,len(seeds),2):
-#     start = int(seeds[x-1])
-#     stop = int(seeds[x])
-#     print(start, start + stop)
-#     for y in range(start, (start +stop)):
-#         seed = y
-#         print(y)
-#         for map in maps:
-#             check = checkRange(seed, map)
-#             if check != None:
-#                 seed = check
-#         print("Cuurrent lowest",lowestEnd)
-#         print("current seed:", seed)
-#         if lowestEnd == None or seed < lowestEnd:
-#             lowestEnd = seed
-# print(lowestEnd)
-
-
-# 1852510996 # too high
-
-
-
-# Day 5 Part 2 Attempt 3
 newMaps = []
 for map in maps:
     tempMap = []
